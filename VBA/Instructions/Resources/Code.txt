@@ -1,0 +1,141 @@
+Sub stockanalysis()
+  
+  Dim ticker As String
+  
+  Dim day As Date
+
+  Dim first As String
+  
+  Dim last As String
+  
+  Dim ticker2 As String
+  
+  Dim value As String
+
+  Dim greatestincrease As String
+  
+  Dim greatestdecrease As String
+  
+  Dim greatesttotalvolume As String
+  
+  Dim Summary_Table_Row As Integer
+  Summary_Table_Row = 2
+  
+   Dim total_volume As Double
+   total_volume = 0
+  
+  Dim yearly_change As String
+  
+  Dim percent_change As String
+  
+  
+  For I = 2 To Cells(Rows.Count, 1).End(xlUp).Row
+  
+  
+
+If Cells(I - 1, 1).value <> Cells(I, 1).value Then
+
+    first = Cells(I, 3).value
+    
+     End If
+     
+If Cells(I - 1, 1).value <> Cells(I, 1).value Then
+    
+    ticker = Cells(I, 1).value
+    
+    last = Cells(I, 6).value
+    
+    yearly_change = last - first
+    
+    percent_change = (last - first) / first * 100
+    
+    total_volume = total_volume + Cells(I, 7).value
+    
+    Range("I" & Summary_Table_Row).value = ticker
+    
+    Range("J" & Summary_Table_Row).value = yearly_change
+    
+    Range("K" & Summary_Table_Row).value = percent_change
+    
+    Range("L" & Summary_Table_Row).value = total_volume
+    
+    Summary_Table_Row = Summary_Table_Row + 1
+    
+    total_volume = 0
+    
+    Else
+    
+    total_volume = total_volume + Cells(I, 7).value
+    
+    Range("I1").value = "Ticker"
+    
+    Range("J1").value = "Yearly Change"
+    
+    Range("K1").value = "Percent Change"
+    
+    Range("L1").value = "Total Stock Volume"
+    
+    End If
+    
+    Next I
+    
+    Range("P1").value = "Ticker"
+    
+    Range("Q1").value = "Value"
+    
+    Range("O2").value = "Greatest % Increase"
+    
+    Range("O3").value = "Greatest % Decrease"
+    
+    Range("O4").value = "Greatest Total Volume"
+    
+    ActiveCell.FormulaR1C1 = "=XLOOKUP(MAX(C[-5]),C[-5],C[-7],,0, )"
+    Range("P3").Select
+    ActiveCell.FormulaR1C1 = "=XLOOKUP(MIN(C[-5]),C[-5],C[-7],,0, )"
+    Range("P4").Select
+    ActiveCell.FormulaR1C1 = "=XLOOKUP(MAX(C[-4]),C[-4],C[-7],,0, )"
+    Range("Q2").Select
+    ActiveCell.FormulaR1C1 = "=XLOOKUP(RC[-1],C[-8],C[-6],,0, )"
+    Range("Q3").Select
+    ActiveWindow.SmallScroll Down:=0
+    ActiveCell.FormulaR1C1 = "=XLOOKUP(RC[-1],C[-8],C[-6],,0, )"
+    Range("Q4").Select
+    ActiveCell.FormulaR1C1 = "=XLOOKUP(RC[-1],C[-8],C[-5],,0, )"
+    Range("Q5").Select
+    Columns("I:I").EntireColumn.AutoFit
+    Columns("J:J").EntireColumn.AutoFit
+    Columns("K:K").EntireColumn.AutoFit
+    Columns("L:L").EntireColumn.AutoFit
+    Columns("O:O").EntireColumn.AutoFit
+    Columns("P:P").EntireColumn.AutoFit
+    ActiveWindow.ScrollColumn = 8
+    Columns("Q:Q").EntireColumn.AutoFit
+    Columns("K:K").Select
+    Selection.Style = "Percent"
+    Range("Q2:Q3").Select
+    Selection.Style = "Percent"
+   
+  Range("J2").Select
+    Range(Selection, Selection.End(xlDown)).Select
+    Selection.FormatConditions.Add Type:=xlCellValue, Operator:=xlGreaterEqual _
+        , Formula1:="=0"
+    Selection.FormatConditions(Selection.FormatConditions.Count).SetFirstPriority
+    With Selection.FormatConditions(1).Interior
+        .PatternColorIndex = xlAutomatic
+        .Color = 5287936
+        .TintAndShade = 0
+    End With
+    Selection.FormatConditions(1).StopIfTrue = False
+    Selection.FormatConditions.Add Type:=xlCellValue, Operator:=xlLess, _
+        Formula1:="=0"
+    Selection.FormatConditions(Selection.FormatConditions.Count).SetFirstPriority
+    With Selection.FormatConditions(1).Interior
+        .PatternColorIndex = xlAutomatic
+        .Color = 255
+        .TintAndShade = 0
+    End With
+    Selection.FormatConditions(1).StopIfTrue = False
+  
+  End Sub
+  
+
